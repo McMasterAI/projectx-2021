@@ -1,0 +1,9 @@
+services:
+  bioconductor:
+    image: bioconductor/bioconductor_docker:devel
+    ports:
+      - 8787:8787
+    environment:
+      PASSWORD: bioc
+    volumes:
+      - ./r:/home/rstudio/projectx-2021
