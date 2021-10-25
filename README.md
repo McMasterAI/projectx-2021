@@ -11,4 +11,4 @@
 * Go to `localhost:8787` to login to RStudio
   * Username is `rstudio`
   * Password is `bioc`
-* The home directory of the container maps to `./r` of this project
+* The `~/projectx-2021` directory of the container maps to `./r` of this project
