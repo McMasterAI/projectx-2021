@@ -7,3 +7,4 @@ services:
       PASSWORD: bioc
     volumes:
       - ./r:/home/rstudio/projectx-2021
+    working_dir: /home/rstudio/projectx-2021
