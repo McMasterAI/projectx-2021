@@ -10,6 +10,7 @@ tqdm = "^4.62.3"
 torch = "^1.10.0"
 torch-geometric = "^2.0.2"
 bioservices = "^1.8.2"
+fire = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
 poetry = "^1.1.12"

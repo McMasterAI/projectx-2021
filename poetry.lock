@@ -365,6 +365,18 @@ docs = ["furo (>=2021.8.17b43)", "sphinx (>=4.1)", "sphinx-autodoc-typehints (>=
 testing = ["covdefaults (>=1.2.0)", "coverage (>=4)", "pytest (>=4)", "pytest-cov", "pytest-timeout (>=1.4.2)"]
 
 [[package]]
+name = "fire"
+version = "0.4.0"
+description = "A library for automatically generating command line interfaces."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+termcolor = "*"
+
+[[package]]
 name = "gevent"
 version = "21.8.0"
 description = "Coroutine-based network library"
@@ -1374,6 +1386,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "termcolor"
+version = "1.1.0"
+description = "ANSII Color formatting for output in terminal."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "terminado"
 version = "0.12.1"
 description = "Tornado websocket backend for the Xterm.js Javascript terminal emulator library."
@@ -1638,7 +1658,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ebfbce3477f06fe5b943e8e6b68230626c1b983c2a8f3a46849423bdd90a4521"
+content-hash = "a4f11929a27c4159aaa5a7304e98044af8b18f0e30b7aad88bcb5cca4bf781e6"
 
 [metadata.files]
 appdirs = [
@@ -1853,6 +1873,9 @@ entrypoints = [
 filelock = [
     {file = "filelock-3.4.0-py3-none-any.whl", hash = "sha256:2e139a228bcf56dd8b2274a65174d005c4a6b68540ee0bdbb92c76f43f29f7e8"},
     {file = "filelock-3.4.0.tar.gz", hash = "sha256:93d512b32a23baf4cac44ffd72ccf70732aeff7b8050fcaf6d3ec406d954baf4"},
+]
+fire = [
+    {file = "fire-0.4.0.tar.gz", hash = "sha256:c5e2b8763699d1142393a46d0e3e790c5eb2f0706082df8f647878842c216a62"},
 ]
 gevent = [
     {file = "gevent-21.8.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:e91632fdcf1c9a33e97e35f96edcbdf0b10e36cf53b58caa946dca4836bb688c"},
@@ -2640,6 +2663,9 @@ soupsieve = [
 suds-community = [
     {file = "suds-community-1.0.0.tar.gz", hash = "sha256:8998fb0b242e4393feffc0a7352577ce282839fcf5f67287be854fc460ea0c6b"},
     {file = "suds_community-1.0.0-py3-none-any.whl", hash = "sha256:f73d192016c1bdb4e4fe7ad0961a76787a0b817abc9cf4a0b2fd7d5ac1d2e0a5"},
+]
+termcolor = [
+    {file = "termcolor-1.1.0.tar.gz", hash = "sha256:1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"},
 ]
 terminado = [
     {file = "terminado-0.12.1-py3-none-any.whl", hash = "sha256:09fdde344324a1c9c6e610ee4ca165c4bb7f5bbf982fceeeb38998a988ef8452"},
