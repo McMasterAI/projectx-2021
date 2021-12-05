@@ -1,8 +1,10 @@
-from tqdm import tqdm
-import urllib.request
 import gzip
 import json
 import os
+import pathlib
+import urllib.request
+
+from tqdm import tqdm
 
 
 def string_db_pull_process(out_dir):
@@ -25,6 +27,7 @@ def string_db_pull_process(out_dir):
 
     os.remove("temp.txt.gz")
 
+    pathlib.Path(out_dir).mkdir(exist_ok=True, parents=True)
     json.dump(string_db, open(os.path.join(out_dir, "string_db.json"), "w"))
 
 
