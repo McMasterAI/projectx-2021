@@ -2,15 +2,22 @@
 name = "projectx-2021"
 version = "0.1.0"
 description = ""
-authors = [
-  "Xin Han (Adam) Tu <adamxhy123@gmail.com>",
-]
+authors = []
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
+tqdm = "^4.62.3"
+torch = "^1.10.0"
+torch-geometric = "^2.0.2"
+bioservices = "^1.8.2"
+fire = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
-black = "^21.9b0"
+poetry = "^1.1.12"
+black = "^21.11b1"
+isort = "^5.10.1"
+jupytext = "^1.13.3"
+notebook = "^6.4.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
