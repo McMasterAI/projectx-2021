@@ -8,6 +8,9 @@ from projectx.graph.inference import ProtBertModule
 
 # TODO: Pad proteins for equal vectors
 
+def chunks(l, n):
+    return [l[i:i + n] for i in range(0, len(l), n)] 
+
 def load_data(pth):
     data = json.load(open(pth))
     string_db_ids = set()
@@ -26,28 +29,38 @@ def poll_uniprot(node):
     name = full[1].split("\t")[0]
     return (name, "".join(o[1:]))
 
-def featurize(ids, device, out_dir):
+def featurize(ids, device, batch_size, out_dir):
     print("Loading in ProtBert...")
     protbert = ProtBertModule(device=device)
-    
-    output = open(out_dir, "w")
+    batches = chunks(ids, batch_size)
 
     print("Creating feature vectors...")
-    for idx in tqdm(ids):
-        name, fasta = poll_uniprot(idx)
-        fasta = protbert.encode(fasta)
-        feats = protbert(fasta).logits
+    for batch in tqdm(batches):
+
+        # Get data for the batch
+        names, fastas = [], []
+        for x in batch:
+            try:
+                name, fasta = poll_uniprot(x)
+                names.append(name)
+                fastas.append(fasta)
+            except:
+                print(f"Missing query for {name}")
+        
+        fastas = protbert.encode(fastas)
+        feats = protbert(fastas).hidden_states[-1][:, :, 0] # Output of the last layer of model, at cls token
         feats = torch.squeeze(feats).cpu().detach().numpy()
 
         # Write to file
-        output.write(f"{name}\t{feats.flatten().tolist()}\n")
-        print(feats.shape)
-
+        for name, feat in zip(names, feats):
+            np.save(open(f"{out_dir}{name}.npy", "wb"), feat)
 
 if __name__ == "__main__":
     device = torch.device("cuda")
-    out_dir = "Corpuses/features.tsv"
+    out_dir = "Corpuses/protein_features/"
+    batch_size = 2
     ids = load_data("Corpuses/string_db.json")
 
-    featurize(ids, device, out_dir)
+    featurize(ids, device, batch_size, out_dir)
+    print("Done.")
     pass

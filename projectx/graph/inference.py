@@ -13,8 +13,9 @@ class ProtBertModule(nn.Module):
         self.model.eval()
 
     def encode(self, x):
-        x = " ".join(x)
-        return self.tokenizer(x, return_tensors='pt').to(self.device)
+        for i in range(len(x)):
+            x[i] = " ".join(x[i])
+        return self.tokenizer(x, return_tensors='pt', max_length=512, truncation=True, padding="max_length").to(self.device)
     
     def decode(self, x):
         x = self.tokenizer.decode(x)
@@ -22,4 +23,4 @@ class ProtBertModule(nn.Module):
         return x
 
     def forward(self, x):
-        return self.model(**x)
+        return self.model(**x, output_hidden_states=True)
