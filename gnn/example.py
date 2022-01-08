@@ -8,16 +8,8 @@ from torch_geometric.nn.glob.glob import global_mean_pool
 
 
 class SimpleGCN(nn.Module):
-    conv_map = {"ChebConv": ChebConv, "GCNConv": GCNConv, "PNAConv": PNAConv}
-
     def __init__(
-        self,
-        in_channels,
-        hidden_channels,
-        num_layers,
-        out_channels,
-        drop_prob=0.0,
-        conv_type="GCNConv",
+        self, in_channels, hidden_channels, num_layers, out_channels, drop_prob=0.0
     ):
         super().__init__()
         assert in_channels > 0
@@ -25,11 +17,9 @@ class SimpleGCN(nn.Module):
         assert num_layers > 0
         assert out_channels > 0
 
-        conv_layer = self.conv_map[conv_type]
-
         layers = [in_channels] + [hidden_channels for _ in range(num_layers)]
         self.convs = nn.ModuleList(
-            [conv_layer(layers[i], layers[i + 1]) for i in range(len(layers) - 1)]
+            [GCNConv(layers[i], layers[i + 1]) for i in range(len(layers) - 1)]
         )
         self.fc = nn.Linear(hidden_channels, out_channels)
         self.drop_prob = drop_prob
@@ -127,6 +117,7 @@ def main():
         hidden_channels=128,
         num_layers=4,
         out_channels=dataset.num_classes,
+        drop_prob=0.0,
     ).to(device)
 
     # loss function
@@ -164,4 +155,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
