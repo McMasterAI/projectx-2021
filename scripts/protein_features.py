@@ -20,7 +20,7 @@ def load_data(pth):
             string_db_ids.add(v["protein2"])
     
     print("StringDB ids loaded.")
-    return list(string_db_ids)
+    return sorted(list(string_db_ids))
 
 def poll_uniprot(node):
     u = UniProt(verbose=False)
@@ -35,8 +35,12 @@ def featurize(ids, device, batch_size, out_dir):
     batches = chunks(ids, batch_size)
 
     print("Creating feature vectors...")
+    count = 0
+    checkpoint = 9692 # one more than crash
     for batch in tqdm(batches):
-
+        count += 1
+        if count < checkpoint:
+            continue
         # Get data for the batch
         names, fastas = [], []
         for x in batch:
@@ -45,7 +49,7 @@ def featurize(ids, device, batch_size, out_dir):
                 names.append(name)
                 fastas.append(fasta)
             except:
-                print(f"Missing query for {name}")
+                print(f"Missing query for {x}")
         
         fastas = protbert.encode(fastas)
         feats = protbert(fastas).hidden_states[-1][:, :, 0] # Output of the last layer of model, at cls token

@@ -2,19 +2,19 @@ import json
 import torch
 from bioservices import UniProt
 from tqdm import tqdm
-from inference import ProtBertModule
 from torch_geometric.data import Data
 
 class geneGraph:
-    def __init__(self, stringdb_dir, device="cpu"):
-        self.device = torch.device(device)
+    def __init__(self, stringdb_dir, batches=20, feat_vecs=None):
+        self.device = device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.stringdb = json.load(open(stringdb_dir))
+        self.feat_vecs = feat_vecs
+        self.batches = batches
         # Create the edges
         self.__create_edges()
-        # Create node features
-        self.__create_features()
+
         # graph
-        self.data = Data(x=self.feat_vecs, edge_index=self.edge_index)
+        self.data = Data(x=self.feat_vecs, edge_index=self.edge_index, batch=self.batches)
     
     def __create_edges(self):
         self.edge_index = [[], []] # starts, ends
@@ -32,24 +32,3 @@ class geneGraph:
                 self.edge_index[0].extend([self.vocab[k], self.vocab[v['protein2']]])
                 self.edge_index[1].extend([self.vocab[v['protein2']], self.vocab[k]])
         self.edge_index = torch.tensor(self.edge_index, dtype=torch.long)
-    
-    def __create_features(self):
-        print("Loading ProtBert...")
-        protbert = ProtBertModule(self.device)
-
-        # Uniprot Lookup for each node
-        u = UniProt(verbose=False)
-
-        self.feat_vecs = []
-
-        for node in tqdm(self.vocab.keys()):
-            o = u.search(node, frmt="fasta").split("\n")
-            fasta = "".join(o[1:])
-            
-            # inference
-            fasta = protbert.encode(fasta)
-            preds = protbert(fasta).logits
-            preds = torch.squeeze(preds).cpu().detach().numpy()
-            self.feat_vecs.append(preds)
-            del preds
-            del fasta

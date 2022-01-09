@@ -1,19 +1,20 @@
+import json
 import torch
 import random
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
+from tqdm import tqdm, trange
 from torch.utils.data import DataLoader
 import torch_geometric.nn as tgnn
 import pytorch_lightning as pl
-from dataset import MethylationDataset
+from projectx.data.dataset import MethylationDataset
 
 class MethylationDataModule(pl.LightningDataModule):
     """Handling the methylation data in batches"""
-    def __init__(self, data_dir, feat_dim):
+    def __init__(self, data_dir):
         super().__init__()
         self.data_dir = data_dir
-        self.feat_dim = feat_dim
 
     def setup(self, data=None):
         # Load in the data
@@ -21,12 +22,14 @@ class MethylationDataModule(pl.LightningDataModule):
 
         # Generate random training data
         if not data:
+            vocab = json.load(open("./Corpuses/string_db.json"))
             data = []
 
-            for i in range(100):
-                cur = []
-                for j in range(len(vocab.keys())):
-                    cur.append((random.random(), random.randint(0,1))) # random label 
+            cur = []
+            for j in trange(len(vocab.keys())):
+                if len(cur) > 1000:
+                    break
+                cur.append((random.random(), random.randint(0,1))) # random label 
                 data.append(cur)
         
 

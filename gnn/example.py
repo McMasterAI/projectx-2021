@@ -28,7 +28,7 @@ class SimpleGCN(nn.Module):
         for conv in self.convs[:-1]:
             x = conv(x, edge_index)
             x = F.relu(x)
-            x = F.dropout(x, p=self.drop_prob, training=self.training)
+            x = F.dropout(x, p=self.drop_prob)
 
         x = self.convs[-1](x, edge_index)
         x = global_mean_pool(x, batch)
